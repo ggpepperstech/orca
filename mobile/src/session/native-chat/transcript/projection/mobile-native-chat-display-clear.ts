@@ -15,7 +15,7 @@ import {
   decodeDeviceStoreValue,
   encodeDeviceStoreValue
 } from '../../../../device-store/device-store-value-codec'
-import { readPageDeviceStore } from '../../../../mobile-web-shell/bridge/page-device-store'
+import { readPageDeviceStore } from '../../../../mobile-web-shell/bridge/page-storage/page-device-store'
 import { useChatTranscriptStoreReadWait } from '../persistence/use-stored-chat-transcript'
 import { chatTranscriptStoreKey } from '../persistence/mobile-native-chat-transcript-store'
 

@@ -3,7 +3,7 @@ import { act, create, type ReactTestRenderer } from 'react-test-renderer'
 import { expect, it } from 'vitest'
 import type { NativeChatMessage } from '../../../../../../src/shared/native-chat/native-chat-types'
 import { decodeDeviceStoreValue } from '../../../../device-store/device-store-value-codec'
-import { publishPageDeviceStore } from '../../../../mobile-web-shell/bridge/page-device-store'
+import { publishPageDeviceStore } from '../../../../mobile-web-shell/bridge/page-storage/page-device-store'
 import {
   clearMobileNativeChatDisplay,
   useMobileNativeChatDisplayMessages

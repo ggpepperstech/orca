@@ -5,7 +5,7 @@ import type { NativeChatMessage } from '../../../../../../src/shared/native-chat
 import {
   publishPageDeviceStore,
   type PageDeviceStoreRead
-} from '../../../../mobile-web-shell/bridge/page-device-store'
+} from '../../../../mobile-web-shell/bridge/page-storage/page-device-store'
 import { encodeDeviceStoreValue } from '../../../../device-store/device-store-value-codec'
 import { chatTranscriptStoreKey } from '../persistence/mobile-native-chat-transcript-store'
 import {
