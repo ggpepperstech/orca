@@ -23,12 +23,18 @@ const LazyAutoNameFailedIndicator = lazyWithRetry(
     })),
   { reloadKey: 'auto-name-failed-indicator' }
 )
+
+const LazyWorktreeCardSshHostControl = lazyWithRetry(
+  () =>
+    import('../host/WorktreeCardSshHostControl').then((module) => ({
+      default: module.WorktreeCardSshHostControl
+    })),
+  { reloadKey: 'worktree-card-ssh-host-control' }
+)
 import {
   WorktreeCardConflictBadge,
   WorktreeCardFolderPath
 } from '../metadata/worktree-card-meta-items'
-import { shouldBeginWorktreeRename } from '../controller/worktree-card-model'
-import { WorktreeCardSshHostControl } from '../host/WorktreeCardSshHostControl'
 import { WorktreeHostContextBadge } from '../host/WorktreeHostContextBadge'
 import { WorktreeTitleInlineRename } from '../identity/WorktreeTitleInlineRename'
 import {
@@ -50,7 +56,7 @@ function CardTitle({
   props: Readonly<Record<string, unknown>>
   card: Card
 }): React.JSX.Element {
-  const { affiliateListMode, worktree } = card
+  const { affiliateListMode } = card
   // Bold and the unread dot are one signal: any unread the card speaks for, its own or a hidden one.
   const rolledUpUnread = useWorktreeCardRolledUpUnread()
   return (
@@ -64,10 +70,7 @@ function CardTitle({
       titleWrapper={props.tooltip === false ? withoutTitleTooltip : undefined}
       onEditingChange={affiliateListMode ? undefined : card.setTitleRenaming}
       onRename={card.handleRenameTitle}
-      beginEditing={
-        !affiliateListMode &&
-        shouldBeginWorktreeRename(card.renamingWorktreeId, worktree.id, card.renameRowKey)
-      }
+      beginEditing={!affiliateListMode && card.shouldBeginRename}
       onBeginEditingConsumed={
         affiliateListMode ? undefined : () => card.setRenamingWorktreeId(null)
       }
@@ -81,15 +84,17 @@ function sshControl(props: Readonly<Record<string, unknown>>, card: Card): React
     return null
   }
   return (
-    <WorktreeCardSshHostControl
-      targetId={repo.connectionId}
-      targetLabel={card.sshTargetLabel || repo.displayName}
-      status={card.sshStatus}
-      targetRemoved={card.sshTargetRemoved}
-      sshOwnerEnvironmentId={card.sshOwnerEnvironmentId}
-      iconOnly={props.iconOnly === true}
-      onPointerDown={card.stopQuickActionPointerPropagation}
-    />
+    <React.Suspense fallback={null}>
+      <LazyWorktreeCardSshHostControl
+        targetId={repo.connectionId}
+        targetLabel={card.sshTargetLabel || repo.displayName}
+        status={card.sshStatus}
+        targetRemoved={card.sshTargetRemoved}
+        sshOwnerEnvironmentId={card.sshOwnerEnvironmentId}
+        iconOnly={props.iconOnly === true}
+        onPointerDown={card.stopQuickActionPointerPropagation}
+      />
+    </React.Suspense>
   )
 }
 
